@@ -1,22 +1,22 @@
-import { Image, StyleSheet } from 'react-native';
-import EditScreenInfo from '../../components/EditScreenInfo';
-import { Text, View } from '../../components/Themed';
+import { StyleSheet, View, FlatList } from 'react-native';
+import Tweet from '../../components/Tweet';
 import tweets from '../../assets/data/tweets';
 const tweet = tweets[0];
 
 export default function TabOneScreen() {
   return (
-    <View style={styles.container}>
-      <Image src={tweet.user.image} style={{width:50, height:50}}/>
-      <Text>{tweet.content}</Text>
+    <View style={styles.page}>
+      <FlatList
+        data={tweets}
+        renderItem={({ item }) => <Tweet tweet={item} />}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  page: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: 'white'
   }
-});
+})
