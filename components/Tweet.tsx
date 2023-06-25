@@ -21,7 +21,7 @@ const Tweet = ({ tweet }: TweetProps) => {
                         <Entypo name="dots-three-horizontal" size={16} color="gray" style={{ marginLeft: 'auto' }} />
                     </View>
                     <Text style={styles.content}>{tweet.content}</Text>
-
+                    
                     {tweet.image && <Image src={tweet.image} style={styles.image} />}
 
                     {/* icons and buttons */}
