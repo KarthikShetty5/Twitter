@@ -1,8 +1,13 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable, useColorScheme } from 'react-native';
+import { Link, Tabs, useNavigation } from 'expo-router';
+import { Image, Pressable, useColorScheme } from 'react-native';
 
-import Colors from '../../constants/Colors';
+import Colors from '../../../constants/Colors';
+
+export const unstable_settings = {
+  //telling that main route is feed
+  initialRouteName: 'feed',
+};
 
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
@@ -14,6 +19,15 @@ function TabBarIcon(props: {
   return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
 }
 
+function AvataHeader() {
+  const navigation = useNavigation();
+  return (
+    <Pressable onPress={() => navigation.openDrawer()}>
+      <Image src="https://notjustdev-dummy.s3.us-east-2.amazonaws.com/images/thumbnail.png" style={{ width: 30, aspectRatio: 1, borderRadius: 40, marginLeft: 10 }} />
+    </Pressable>
+  )
+}
+
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
@@ -23,9 +37,9 @@ export default function TabLayout() {
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
       }}>
       <Tabs.Screen
-        name="index"
+        name="feed"
         options={{
-          title: 'Tab One',
+          title: 'Feed',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
           headerRight: () => (
             <Link href="/modal" asChild>
@@ -41,6 +55,7 @@ export default function TabLayout() {
               </Pressable>
             </Link>
           ),
+          headerLeft: () => <AvataHeader />
         }}
       />
       <Tabs.Screen
