@@ -27,7 +27,7 @@ export default function FeedScreen() {
     return <ActivityIndicator />
   }
   if (error) {
-    console.log(error); 
+    console.log(error);
   }
 
   return (

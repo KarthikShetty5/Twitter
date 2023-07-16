@@ -1,6 +1,8 @@
 import { Link, useRouter } from 'expo-router'
 import { useState } from 'react'
-import { View, StyleSheet, Text, Image, TextInput, Pressable, SafeAreaView } from 'react-native'
+import { View, StyleSheet, Text, Image, TextInput, Pressable, SafeAreaView, ActivityIndicator } from 'react-native'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { createTweet } from '../lib/api/tweets'
 
 const user = {
     id: 'u1',
@@ -13,12 +15,26 @@ const user = {
 export default function newTweet() {
     const [text, setText] = useState("");
     const router = useRouter();
+    const queryClient = useQueryClient();
 
-    const onTweetPress = () => {
-        console.warn("Posting the tweet...", text);
-        setText("");
-        router.back();
+    const { mutateAsync, isLoading, isError, error } = useMutation({
+        mutationFn: createTweet,
+        onSuccess: (data) => {
+            // queryClient.invalidateQueries({ queryKey: ['tweets'] }) //to add the new tweet and display it as fast as possible
+            queryClient.setQueriesData(['tweets'], (existingTweets) => [data, ...existingTweets])
+        }
+    });
+
+    const onTweetPress = async () => {
+        try {
+            mutateAsync({ content: text });
+            setText("");
+            router.back();
+        } catch (e) {
+            console.log("Error:", e.message)
+        }
     }
+
     return (
         <SafeAreaView style={{ flex: 1, paddingTop: 18 }}>
             <View style={styles.container}>
@@ -26,6 +42,7 @@ export default function newTweet() {
                 <View style={styles.buttonContainer}>
                     {/* buttons */}
                     <Link href="../" style={{ fontSize: 18 }}>Cancel</Link>
+                    {isLoading && < ActivityIndicator />}
                     <Pressable onPress={onTweetPress} style={styles.button}>
                         <Text style={styles.buttonText}>Tweet</Text>
                     </Pressable>
@@ -41,6 +58,7 @@ export default function newTweet() {
                         numberOfLines={1}
                         style={{ flex: 1 }} />
                 </View>
+                {isError && <Text>Error:{error.message}</Text>}
             </View>
         </SafeAreaView>
     )
