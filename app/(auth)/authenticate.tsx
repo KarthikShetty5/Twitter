@@ -2,19 +2,24 @@ import React, { useState } from 'react'
 import { Text, View, TextInput, Pressable, StyleSheet, Alert } from 'react-native'
 import { useSearchParams } from 'expo-router'
 import { authenticate } from '../../lib/api/auth'
+import { useAuth } from '../../context/AuthContext'
 
 
 const Authenticate = () => {
     const [code, setCode] = useState('')
     const { email } = useSearchParams();
 
+    const { updateAuthToken } = useAuth();
+
     const onConfirm = async () => {
         if (typeof email != 'string') {
             return;
         }
         try {
+            //@ts-ignore
             const res = await authenticate({ email, emailToken: code });
             console.log(res);
+            await updateAuthToken(res.authToken)
         } catch (e) {
             Alert.alert("Error", "Email code doesn't match")
         }
