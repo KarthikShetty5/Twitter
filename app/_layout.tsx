@@ -50,8 +50,10 @@ function RootLayoutNav() {
           <Stack>
             <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
             <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-            <Stack.Screen name="tweet/[id]" options={{ title: "Tweet" }} />
+            {/* <Stack.Screen name="tweet/[id]" options={{ title: "Tweet" }} /> */}
             <Stack.Screen name="new-tweet" options={{ title: "New Tweet", headerShown: false }} />
+            <Stack.Screen name="(auth)/signin" options={{ headerShown: false }} />
+            <Stack.Screen name="(auth)/authenticate" options={{ title: "Confirm" }} />
           </Stack>
         </ThemeProvider>
       </QueryClientProvider>

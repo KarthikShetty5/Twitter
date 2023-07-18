@@ -1,13 +1,24 @@
 import React, { useState } from 'react'
-import { Text, View, TextInput, Pressable, StyleSheet } from 'react-native'
+import { Text, View, TextInput, Pressable, StyleSheet, Alert } from 'react-native'
 import { useRouter } from 'expo-router'
+import { login } from '../../lib/api/auth'
 
 const SignIn = () => {
     const [email, setEmail] = useState('')
     const router = useRouter();
 
+    // const { } = useMutation({
+    //     mutationFn: login //mutation fnctn must be the same which we defined in auth for signin as login
+    // });    //this method is removed
+
     const onSignIn = async () => {
-        router.push({ pathname: '/authenticate', params: { email } })
+        console.warn("SignIn", email);
+        try {
+            await login({ email });
+            router.push({ pathname: '/authenticate', params: { email } })
+        } catch (e) {
+            Alert.alert("Error", e.message)
+        }
     }
 
     return (

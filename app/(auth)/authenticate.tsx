@@ -1,12 +1,23 @@
 import React, { useState } from 'react'
-import { Text, View, TextInput, Pressable, StyleSheet } from 'react-native'
+import { Text, View, TextInput, Pressable, StyleSheet, Alert } from 'react-native'
+import { useSearchParams } from 'expo-router'
+import { authenticate } from '../../lib/api/auth'
 
 
 const Authenticate = () => {
     const [code, setCode] = useState('')
+    const { email } = useSearchParams();
 
     const onConfirm = async () => {
-
+        if (typeof email != 'string') {
+            return;
+        }
+        try {
+            const res = await authenticate({ email, emailToken: code });
+            console.log(res);
+        } catch (e) {
+            Alert.alert("Error", "Email code doesn't match")
+        }
     }
 
     return (
@@ -21,7 +32,7 @@ const Authenticate = () => {
             />
 
             <Pressable style={styles.button} onPress={onConfirm}>
-                <Text style={styles.buttonText}>Sign in</Text>
+                <Text style={styles.buttonText}>Continue</Text>
             </Pressable>
         </View>
     )
