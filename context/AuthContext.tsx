@@ -13,7 +13,7 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
 
     useEffect(() => {
         const isAuthGroup = segments[0] === '(auth)';
-        if (!authToken || !isAuthGroup) {
+        if (!authToken && !isAuthGroup) {
             router.replace('/signin');
         }
         if (authToken && isAuthGroup) {
@@ -30,15 +30,20 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
             }
         }
         loadAuthToken();
-    })
+    }, [])
 
     const updateAuthToken = async (newToken: string) => {
         await SecureStore.setItemAsync('authToken', newToken);
         setAuthToken(newToken);
     }
 
+    const removeAuthToken = async () => {
+        await SecureStore.deleteItemAsync('authToken');
+        setAuthToken(null);
+    };
+
     return (
-        <AuthContext.Provider value={{ authToken, updateAuthToken }}>
+        <AuthContext.Provider value={{ authToken, updateAuthToken, removeAuthToken }}>
             {children}
         </AuthContext.Provider>
     )

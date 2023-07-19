@@ -6,7 +6,7 @@ import Colors from '../../../constants/Colors';
 
 export const unstable_settings = {
   //telling that main route is feed
-  initialRouteName: 'feed',
+  initialRouteName: 'two',
 };
 
 /**
